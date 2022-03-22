@@ -53,7 +53,6 @@ def check_time(time_range,meet_link,check_every):
         # set time for start of meeting hour here
         success=False
         for i in range(len(time_range)):
-            print(time_range)
             now = datetime.datetime.now().time().hour*60*60+datetime.datetime.now().time().minute*60
             success=False
             if now in range(time_range[i][0],time_range[i][1]): 
@@ -90,7 +89,6 @@ def main():
         start_time = meeting_start[0]*60*60+meeting_start[1]*60
     
         end_time = start_time+meeting_length+post_meet
-        print(now,start_time,end_time)
         if now>end_time:
             break
     os.system("taskkill /F /IM obs64.exe")
