@@ -1,16 +1,16 @@
 import datetime, time, webbrowser, os
 
-meeting_start  = (1,55)     # this is hh:mm local time.
-meeting_length = 5*60  # (in seconds) this is 2 hours entirely.
+meeting_start  = (2,33)     # this is hh:mm local time.
+meeting_length = 1*60  # (in seconds) this is 2 hours entirely.
 
-rejoin_time=1*60 # (in sec) rejoin every 40 minute
+rejoin_time=int(0.5*60) # (in sec) rejoin every 0.5 minute
 
-meet_id="123456789"
-meet_pass="123456"
+meet_id="123123123123"
+meet_pass="123123"
 
 check_every=1*60 # Check for if there is meeting every 1 minutes(Must be less than pre-meet)
 pre_meet= 5*60 # Time to start this process before actual start of meeting
-post_meet=5*60 # Time to record after scheduled record end time
+post_meet=int(0.2*60) # Time to record after scheduled record end time
 
 if check_every>pre_meet:
     check_every = pre_meet
@@ -53,7 +53,7 @@ def check_time(time_range,meet_link,check_every):
         # set time for start of meeting hour here
         success=False
         for i in range(len(time_range)):
-            
+            print(time_range)
             now = datetime.datetime.now().time().hour*60*60+datetime.datetime.now().time().minute*60
             success=False
             if now in range(time_range[i][0],time_range[i][1]): 
@@ -80,11 +80,19 @@ def main():
 
     print(f"Recording for {round(meeting_length/3600,2)} hours.. ")
     
-    while(check_time(time_range,meet_link,check_every)):
+    while True:
+        check_time(time_range,meet_link,check_every)
         # set the length of meeting in seconds
         time.sleep(rejoin_time)
+        
         # Bug if last interval less than rejoin time then record for more time
+        now = datetime.datetime.now().time().hour*60*60+datetime.datetime.now().time().minute*60
+        start_time = meeting_start[0]*60*60+meeting_start[1]*60
     
+        end_time = start_time+meeting_length+post_meet
+        print(now,start_time,end_time)
+        if now>end_time:
+            break
     os.system("taskkill /F /IM obs64.exe")
 
 main()
